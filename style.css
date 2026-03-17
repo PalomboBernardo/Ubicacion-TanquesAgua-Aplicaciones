@@ -2,11 +2,16 @@
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
     background: #f5f7fb;
     color: #1f2937;
+}
+
+body {
+    min-height: 100vh;
 }
 
 .app {
@@ -62,10 +67,10 @@ body {
 .field input,
 .row input {
     width: 100%;
-    padding: 11px 12px;
+    padding: 12px 14px;
     border: 1px solid #d1d5db;
-    border-radius: 10px;
-    font-size: 14px;
+    border-radius: 12px;
+    font-size: 16px;
     background: #fff;
 }
 
@@ -79,10 +84,10 @@ button,
 .btn {
     border: none;
     cursor: pointer;
-    padding: 12px 14px;
-    border-radius: 10px;
+    padding: 13px 14px;
+    border-radius: 12px;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 15px;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -158,12 +163,14 @@ button:hover,
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background: #fff;
 }
 
 .map-header {
     padding: 16px 18px 12px;
     background: #ffffff;
     border-bottom: 1px solid #e5e7eb;
+    z-index: 5;
 }
 
 .map-header h2 {
@@ -206,35 +213,6 @@ button:hover,
     min-height: 520px;
 }
 
-.topbar {
-    position: absolute;
-    top: 150px;
-    left: 14px;
-    right: 14px;
-    z-index: 999;
-    display: none;
-}
-
-.mobile-box {
-    background: rgba(255, 255, 255, 0.96);
-    padding: 10px;
-    border-radius: 14px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-}
-
-.status {
-    margin-top: 10px;
-    font-size: 13px;
-    color: #1d4ed8;
-    line-height: 1.4;
-}
-
-.small-text {
-    font-size: 12px;
-    color: #6b7280;
-    margin-top: 8px;
-}
-
 .site-footer {
     background: #ffffff;
     border-top: 1px solid #e5e7eb;
@@ -244,6 +222,7 @@ button:hover,
     color: #4b5563;
 }
 
+/* Leaflet */
 .leaflet-control-layers {
     border-radius: 12px !important;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12) !important;
@@ -270,6 +249,17 @@ button:hover,
     font-size: 13px;
 }
 
+/* MOBILE PANEL */
+.mobile-floating-btn,
+.mobile-overlay,
+.mobile-panel {
+    display: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
 @media (max-width: 900px) {
     .app {
         grid-template-columns: 1fr;
@@ -277,15 +267,6 @@ button:hover,
 
     .sidebar {
         display: none;
-    }
-
-    .topbar {
-        display: block;
-        top: 185px;
-    }
-
-    .mobile-row {
-        margin-bottom: 8px;
     }
 
     .map-header {
@@ -297,6 +278,98 @@ button:hover,
     }
 
     #map {
-        min-height: 70vh;
+        min-height: 72vh;
+    }
+
+    .mobile-floating-btn {
+        display: flex;
+        position: absolute;
+        right: 14px;
+        bottom: 90px;
+        z-index: 1200;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 14px 18px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    .mobile-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 1400;
+    }
+
+    .mobile-panel {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-height: 82vh;
+        background: #fff;
+        border-radius: 22px 22px 0 0;
+        z-index: 1500;
+        box-shadow: 0 -12px 30px rgba(0, 0, 0, 0.22);
+    }
+
+    .mobile-panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .mobile-panel-header h3 {
+        margin: 0;
+        font-size: 20px;
+    }
+
+    .close-mobile-panel {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        background: #f3f4f6;
+        color: #111827;
+        padding: 0;
+        font-size: 20px;
+    }
+
+    .mobile-panel-content {
+        padding: 14px 16px 18px;
+        overflow-y: auto;
+    }
+
+    .mobile-row {
+        margin-bottom: 8px;
+    }
+
+    .mobile-status {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #1d4ed8;
+        line-height: 1.4;
+    }
+
+    .small-text {
+        font-size: 13px;
+        color: #6b7280;
+        margin-top: 8px;
+        line-height: 1.45;
+    }
+
+    .leaflet-top.leaflet-right {
+        top: 10px;
+        right: 10px;
+    }
+
+    .leaflet-top.leaflet-left {
+        top: 10px;
+        left: 10px;
     }
 }

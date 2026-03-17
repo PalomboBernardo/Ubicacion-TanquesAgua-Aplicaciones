@@ -20,7 +20,6 @@ const satelite = L.tileLayer(
     }
 );
 
-// satélite por defecto
 satelite.addTo(map);
 
 L.control.layers(
@@ -65,6 +64,11 @@ const waBtn1Mobile = document.getElementById("waBtn1Mobile");
 const waBtn2Mobile = document.getElementById("waBtn2Mobile");
 const clearBtnMobile = document.getElementById("clearBtnMobile");
 
+const openMobilePanelBtn = document.getElementById("openMobilePanel");
+const closeMobilePanelBtn = document.getElementById("closeMobilePanel");
+const mobilePanel = document.getElementById("mobilePanel");
+const mobileOverlay = document.getElementById("mobileOverlay");
+
 // ===== ESTADO =====
 let points = [];
 let markers = [];
@@ -104,6 +108,20 @@ function setStatus(message) {
 function syncInputs(source, target) {
     if (!source || !target) return;
     target.value = source.value;
+}
+
+function openMobilePanel() {
+    if (!mobilePanel || !mobileOverlay) return;
+    mobilePanel.classList.remove("hidden");
+    mobileOverlay.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+function closeMobilePanel() {
+    if (!mobilePanel || !mobileOverlay) return;
+    mobilePanel.classList.add("hidden");
+    mobileOverlay.classList.add("hidden");
+    document.body.style.overflow = "";
 }
 
 function createNumberedIcon(number) {
@@ -190,6 +208,10 @@ function addPoint(latlng) {
     });
 
     renderPoints();
+
+    if (isMobileView()) {
+        closeMobilePanel();
+    }
 }
 
 function buildMessage() {
@@ -281,6 +303,10 @@ function searchLocation(query) {
 
             map.setView([lat, lon], 16);
             setStatus("Ubicación encontrada. Ahora marcá todos los puntos que quieras.");
+
+            if (isMobileView()) {
+                closeMobilePanel();
+            }
         })
         .catch(() => {
             setStatus("Hubo un error al buscar la ubicación.");
@@ -316,6 +342,10 @@ function goToUserLocation() {
             userMarker.bindPopup("Tu ubicación actual").openPopup();
 
             setStatus("Ubicación actual encontrada. Ahora marcá los puntos en el mapa.");
+
+            if (isMobileView()) {
+                closeMobilePanel();
+            }
         },
         () => {
             setStatus("No se pudo obtener tu ubicación. Podés buscar el campo manualmente.");
@@ -371,6 +401,19 @@ if (gpsBtnMobile) gpsBtnMobile.addEventListener("click", goToUserLocation);
 // ===== EVENTOS BORRAR TODO =====
 if (clearBtn) clearBtn.addEventListener("click", clearAllPoints);
 if (clearBtnMobile) clearBtnMobile.addEventListener("click", clearAllPoints);
+
+// ===== PANEL MOBILE =====
+if (openMobilePanelBtn) {
+    openMobilePanelBtn.addEventListener("click", openMobilePanel);
+}
+
+if (closeMobilePanelBtn) {
+    closeMobilePanelBtn.addEventListener("click", closeMobilePanel);
+}
+
+if (mobileOverlay) {
+    mobileOverlay.addEventListener("click", closeMobilePanel);
+}
 
 // ===== SINCRONIZACIÓN DE INPUTS =====
 if (nameInput && nameInputMobile) {

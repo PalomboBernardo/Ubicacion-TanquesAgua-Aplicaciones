@@ -14,7 +14,7 @@
 
 <body>
     <div class="app">
-        <!-- PANEL IZQUIERDO PC -->
+        <!-- PANEL DESKTOP -->
         <aside class="sidebar">
             <h1>Mapa de Tanques</h1>
             <p class="intro-text">
@@ -68,7 +68,7 @@
 
                 <a id="waBtn1" class="btn success" href="#" target="_blank" rel="noopener noreferrer"
                     style="pointer-events: none; opacity: .5;">
-                    Enviar puntos a Palombo Bernard
+                    Enviar puntos a Palombo Bernardo
                 </a>
 
                 <a id="waBtn2" class="btn success alt" href="#" target="_blank" rel="noopener noreferrer"
@@ -118,55 +118,61 @@
                 </div>
             </div>
 
-            <!-- PANEL MOBILE COMPLETO -->
-            <div class="topbar">
-                <div class="mobile-box">
-                    <div class="mobile-scroll">
-                        <h3 class="mobile-title">Cargar datos y marcar puntos</h3>
+            <!-- MOBILE: BOTÓN FLOTANTE -->
+            <button id="openMobilePanel" class="mobile-floating-btn" type="button">
+                Completar datos
+            </button>
 
-                        <div class="field">
-                            <label for="nameMobile">Nombre</label>
-                            <input id="nameMobile" type="text" placeholder="Ej: Juan Pérez" />
-                        </div>
+            <!-- MOBILE: PANEL -->
+            <div id="mobileOverlay" class="mobile-overlay hidden"></div>
 
-                        <div class="field">
-                            <label for="phoneMobile">Teléfono</label>
-                            <input id="phoneMobile" type="tel" placeholder="Ej: 3472..." />
-                        </div>
+            <div id="mobilePanel" class="mobile-panel hidden">
+                <div class="mobile-panel-header">
+                    <h3>Cargar datos y marcar puntos</h3>
+                    <button id="closeMobilePanel" class="close-mobile-panel" type="button">✕</button>
+                </div>
 
-                        <div class="field">
-                            <label for="fieldNameMobile">Nombre del campo</label>
-                            <input id="fieldNameMobile" type="text" placeholder="Ej: Campo La Esperanza" />
-                        </div>
-
-                        <div class="row mobile-row">
-                            <input id="searchInputMobile" type="text" placeholder="Buscar campo o ubicación" />
-                            <button class="primary" id="searchBtnMobile">Buscar</button>
-                        </div>
-
-                        <button class="gps-btn" id="gpsBtnMobile">Usar mi ubicación</button>
-
-                        <div class="small-text">
-                            Completá tus datos, buscá el lugar o usá tu ubicación y después tocá el mapa para agregar
-                            uno o varios puntos.
-                        </div>
-
-                        <div class="mobile-status" id="searchStatusMobile"></div>
-
-                        <div class="mobile-actions">
-                            <a id="waBtn1Mobile" class="btn success" href="#" target="_blank" rel="noopener noreferrer"
-                                style="pointer-events: none; opacity: .5;">
-                                Enviar a Bernardo
-                            </a>
-
-                            <a id="waBtn2Mobile" class="btn success alt" href="#" target="_blank"
-                                rel="noopener noreferrer" style="pointer-events: none; opacity: .5;">
-                                Enviar al segundo número
-                            </a>
-
-                            <button id="clearBtnMobile" class="secondary">Borrar todos los puntos</button>
-                        </div>
+                <div class="mobile-panel-content">
+                    <div class="field">
+                        <label for="nameMobile">Nombre</label>
+                        <input id="nameMobile" type="text" placeholder="Ej: Juan Pérez" />
                     </div>
+
+                    <div class="field">
+                        <label for="phoneMobile">Teléfono</label>
+                        <input id="phoneMobile" type="tel" placeholder="Ej: 3472..." />
+                    </div>
+
+                    <div class="field">
+                        <label for="fieldNameMobile">Nombre del campo</label>
+                        <input id="fieldNameMobile" type="text" placeholder="Ej: Campo La Esperanza" />
+                    </div>
+
+                    <div class="row mobile-row">
+                        <input id="searchInputMobile" type="text" placeholder="Buscar campo o ubicación" />
+                        <button class="primary" id="searchBtnMobile">Buscar</button>
+                    </div>
+
+                    <button class="gps-btn" id="gpsBtnMobile">Usar mi ubicación</button>
+
+                    <div class="small-text">
+                        Completá tus datos, buscá el lugar o usá tu ubicación y después tocá el mapa para agregar uno o
+                        varios puntos.
+                    </div>
+
+                    <div class="mobile-status" id="searchStatusMobile"></div>
+
+                    <a id="waBtn1Mobile" class="btn success" href="#" target="_blank" rel="noopener noreferrer"
+                        style="pointer-events: none; opacity: .5;">
+                        Enviar a Bernardo
+                    </a>
+
+                    <a id="waBtn2Mobile" class="btn success alt" href="#" target="_blank" rel="noopener noreferrer"
+                        style="pointer-events: none; opacity: .5;">
+                        Enviar al segundo número
+                    </a>
+
+                    <button id="clearBtnMobile" class="secondary">Borrar todos los puntos</button>
                 </div>
             </div>
 
