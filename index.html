@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa de Tanques de Agua</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <h1>Ubicacion de Taques</h1>
+            <p class="intro-text">
+                Esta herramienta permite ubicar uno o varios tanques de agua dentro del campo y enviar todos los puntos
+                juntos por WhatsApp para organizar una visita, relevamiento o servicio.
+            </p>
+
+            <div class="card">
+                <h2>1) Datos del productor</h2>
+
+                <div class="field">
+                    <label for="name">Nombre</label>
+                    <input id="name" type="text" placeholder="Ej: Juan Pérez" />
+                </div>
+
+                <div class="field">
+                    <label for="phone">Teléfono</label>
+                    <input id="phone" type="tel" placeholder="Ej: 3472..." />
+                </div>
+
+                <div class="field">
+                    <label for="fieldName">Nombre del campo</label>
+                    <input id="fieldName" type="text" placeholder="Ej: Campo La Esperanza" />
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>2) Buscar ubicación</h2>
+
+                <div class="row">
+                    <input id="searchInput" type="text" placeholder="Buscar campo, pueblo o dirección" />
+                    <button class="primary" id="searchBtn">Buscar</button>
+                </div>
+
+                <button class="gps-btn" id="gpsBtn">Usar mi ubicación actual</button>
+
+                <div class="hint">
+                    Si aceptás el permiso de ubicación, el mapa intentará llevarte a tu posición actual para ubicarte
+                    más rápido.
+                </div>
+
+                <div class="status" id="searchStatus"></div>
+            </div>
+
+            <div class="card">
+                <h2>3) Puntos seleccionados</h2>
+
+                <div class="coords" id="coordsBox">
+                    Todavía no hay puntos marcados.
+                </div>
+
+                <a id="waBtn1" class="btn success" href="#" target="_blank" rel="noopener noreferrer"
+                    style="pointer-events: none; opacity: .5;">
+                    Enviar puntos a Palombo Bernardo
+                </a>
+
+                <a id="waBtn2" class="btn success alt" href="#" target="_blank" rel="noopener noreferrer"
+                    style="pointer-events: none; opacity: .5;">
+                    Enviar puntos a Anconetani Ignacio
+                </a>
+
+                <button id="clearBtn" class="secondary">Borrar todos los puntos</button>
+
+                <div class="hint">
+                    Cada toque o clic en el mapa agrega un nuevo punto. Cuando terminás, enviás todos juntos por
+                    WhatsApp.
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Contacto directo</h2>
+                <p class="small-text">
+                    Si necesitás ayuda o querés coordinar directamente, podés escribir por WhatsApp.
+                </p>
+
+                <a id="contactBtn" class="btn contact-btn"
+                    href="https://wa.me/5493472580898?text=Hola%20Bernardo%2C%20quiero%20hacer%20una%20consulta%20sobre%20ubicaci%C3%B3n%20de%20tanques%20de%20agua."
+                    target="_blank" rel="noopener noreferrer">
+                    Escribirme por WhatsApp
+                </a>
+            </div>
+        </aside>
+
+        <main class="map-wrap">
+            <div class="map-header">
+                <h2>Ubicación de tanques de agua</h2>
+                <p>
+                    Marcá en el mapa todos los puntos que quieras enviar. Esta herramienta está pensada para que
+                    productores y responsables del campo puedan compartir ubicaciones de forma simple y rápida.
+                </p>
+
+                <div class="instructions">
+                    <strong>Cómo usarla:</strong>
+                    <ol>
+                        <li>Completá tu nombre, teléfono y nombre del campo.</li>
+                        <li>Permití la ubicación o buscá el campo manualmente.</li>
+                        <li>Hacé clic o tocá el mapa para marcar cada tanque.</li>
+                        <li>Cuando termines, enviá todos los puntos por WhatsApp.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="topbar">
+                <div class="mobile-box">
+                    <div class="row mobile-row">
+                        <input id="searchInputMobile" type="text" placeholder="Buscar campo o ubicación" />
+                        <button class="primary" id="searchBtnMobile">Buscar</button>
+                    </div>
+
+                    <button class="gps-btn" id="gpsBtnMobile">Usar mi ubicación</button>
+
+                    <div class="small-text">
+                        Tocá el mapa para agregar uno o varios puntos.
+                    </div>
+                </div>
+            </div>
+
+            <div id="map"></div>
+
+            <footer class="site-footer">
+                Creado por <strong>Ing. Agro. Palombo Bernardo A.</strong>
+            </footer>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script src="./main.js"></script>
+</body>
+
+</html>
