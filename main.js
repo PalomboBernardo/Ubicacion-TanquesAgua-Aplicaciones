@@ -34,7 +34,7 @@ L.control.layers(
     }
 ).addTo(map);
 
-// ===== ELEMENTOS =====
+// ===== ELEMENTOS DESKTOP =====
 const nameInput = document.getElementById("name");
 const phoneInput = document.getElementById("phone");
 const fieldNameInput = document.getElementById("fieldName");
@@ -42,26 +42,70 @@ const fieldNameInput = document.getElementById("fieldName");
 const searchInput = document.getElementById("searchInput");
 const searchBtn = document.getElementById("searchBtn");
 
-const searchInputMobile = document.getElementById("searchInputMobile");
-const searchBtnMobile = document.getElementById("searchBtnMobile");
-
 const gpsBtn = document.getElementById("gpsBtn");
-const gpsBtnMobile = document.getElementById("gpsBtnMobile");
-
 const searchStatus = document.getElementById("searchStatus");
 const coordsBox = document.getElementById("coordsBox");
 
 const waBtn1 = document.getElementById("waBtn1");
 const waBtn2 = document.getElementById("waBtn2");
-
 const clearBtn = document.getElementById("clearBtn");
+
+// ===== ELEMENTOS MOBILE =====
+const nameInputMobile = document.getElementById("nameMobile");
+const phoneInputMobile = document.getElementById("phoneMobile");
+const fieldNameInputMobile = document.getElementById("fieldNameMobile");
+
+const searchInputMobile = document.getElementById("searchInputMobile");
+const searchBtnMobile = document.getElementById("searchBtnMobile");
+
+const gpsBtnMobile = document.getElementById("gpsBtnMobile");
+const searchStatusMobile = document.getElementById("searchStatusMobile");
+
+const waBtn1Mobile = document.getElementById("waBtn1Mobile");
+const waBtn2Mobile = document.getElementById("waBtn2Mobile");
+const clearBtnMobile = document.getElementById("clearBtnMobile");
 
 // ===== ESTADO =====
 let points = [];
 let markers = [];
 let userMarker = null;
 
-// ===== FUNCIONES =====
+// ===== HELPERS =====
+function isMobileView() {
+    return window.innerWidth <= 900;
+}
+
+function getActiveName() {
+    if (isMobileView() && nameInputMobile) {
+        return (nameInputMobile.value || "").trim() || (nameInput?.value || "").trim();
+    }
+    return (nameInput?.value || "").trim() || (nameInputMobile?.value || "").trim();
+}
+
+function getActivePhone() {
+    if (isMobileView() && phoneInputMobile) {
+        return (phoneInputMobile.value || "").trim() || (phoneInput?.value || "").trim();
+    }
+    return (phoneInput?.value || "").trim() || (phoneInputMobile?.value || "").trim();
+}
+
+function getActiveFieldName() {
+    if (isMobileView() && fieldNameInputMobile) {
+        return (fieldNameInputMobile.value || "").trim() || (fieldNameInput?.value || "").trim();
+    }
+    return (fieldNameInput?.value || "").trim() || (fieldNameInputMobile?.value || "").trim();
+}
+
+function setStatus(message) {
+    if (searchStatus) searchStatus.textContent = message;
+    if (searchStatusMobile) searchStatusMobile.textContent = message;
+}
+
+function syncInputs(source, target) {
+    if (!source || !target) return;
+    target.value = source.value;
+}
+
 function createNumberedIcon(number) {
     return L.divIcon({
         className: "",
@@ -71,12 +115,11 @@ function createNumberedIcon(number) {
     });
 }
 
+// ===== RENDER =====
 function renderPoints() {
-    // borrar marcadores viejos
     markers.forEach((marker) => map.removeLayer(marker));
     markers = [];
 
-    // volver a dibujar todos con numeración actualizada
     points.forEach((point, index) => {
         const marker = L.marker([point.lat, point.lng], {
             icon: createNumberedIcon(index + 1)
@@ -114,16 +157,9 @@ function renderPoints() {
     updateWhatsAppLinks();
 }
 
-function addPoint(latlng) {
-    points.push({
-        lat: latlng.lat,
-        lng: latlng.lng
-    });
-
-    renderPoints();
-}
-
 function updatePointsPanel() {
+    if (!coordsBox) return;
+
     if (points.length === 0) {
         coordsBox.innerHTML = "Todavía no hay puntos marcados.";
         return;
@@ -146,10 +182,20 @@ function updatePointsPanel() {
     coordsBox.innerHTML = html;
 }
 
+// ===== LÓGICA =====
+function addPoint(latlng) {
+    points.push({
+        lat: latlng.lat,
+        lng: latlng.lng
+    });
+
+    renderPoints();
+}
+
 function buildMessage() {
-    const name = (nameInput.value || "").trim();
-    const phone = (phoneInput.value || "").trim();
-    const fieldName = (fieldNameInput.value || "").trim();
+    const name = getActiveName();
+    const phone = getActivePhone();
+    const fieldName = getActiveFieldName();
 
     const lines = [
         "Hola, les envío la ubicación de tanques de agua.",
@@ -175,8 +221,10 @@ function buildMessage() {
 }
 
 function updateWhatsAppLinks() {
+    const allButtons = [waBtn1, waBtn2, waBtn1Mobile, waBtn2Mobile].filter(Boolean);
+
     if (points.length === 0) {
-        [waBtn1, waBtn2].forEach((btn) => {
+        allButtons.forEach((btn) => {
             btn.style.pointerEvents = "none";
             btn.style.opacity = ".5";
             btn.href = "#";
@@ -186,10 +234,15 @@ function updateWhatsAppLinks() {
 
     const message = buildMessage();
 
-    waBtn1.href = `https://wa.me/${WHATSAPP_NUMBER_1}?text=${encodeURIComponent(message)}`;
-    waBtn2.href = `https://wa.me/${WHATSAPP_NUMBER_2}?text=${encodeURIComponent(message)}`;
+    const link1 = `https://wa.me/${WHATSAPP_NUMBER_1}?text=${encodeURIComponent(message)}`;
+    const link2 = `https://wa.me/${WHATSAPP_NUMBER_2}?text=${encodeURIComponent(message)}`;
 
-    [waBtn1, waBtn2].forEach((btn) => {
+    if (waBtn1) waBtn1.href = link1;
+    if (waBtn2) waBtn2.href = link2;
+    if (waBtn1Mobile) waBtn1Mobile.href = link1;
+    if (waBtn2Mobile) waBtn2Mobile.href = link2;
+
+    allButtons.forEach((btn) => {
         btn.style.pointerEvents = "auto";
         btn.style.opacity = "1";
     });
@@ -204,11 +257,11 @@ function searchLocation(query) {
     const q = (query || "").trim();
 
     if (!q) {
-        searchStatus.textContent = "Escribí una ubicación para buscar.";
+        setStatus("Escribí una ubicación para buscar.");
         return;
     }
 
-    searchStatus.textContent = "Buscando ubicación...";
+    setStatus("Buscando ubicación...");
 
     fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(q)}`, {
         headers: {
@@ -218,7 +271,7 @@ function searchLocation(query) {
         .then((response) => response.json())
         .then((data) => {
             if (!data.length) {
-                searchStatus.textContent = "No encontré esa ubicación. Probá con otro nombre.";
+                setStatus("No encontré esa ubicación. Probá con otro nombre.");
                 return;
             }
 
@@ -227,20 +280,20 @@ function searchLocation(query) {
             const lon = parseFloat(result.lon);
 
             map.setView([lat, lon], 16);
-            searchStatus.textContent = "Ubicación encontrada. Ahora marcá todos los puntos que quieras.";
+            setStatus("Ubicación encontrada. Ahora marcá todos los puntos que quieras.");
         })
         .catch(() => {
-            searchStatus.textContent = "Hubo un error al buscar la ubicación.";
+            setStatus("Hubo un error al buscar la ubicación.");
         });
 }
 
 function goToUserLocation() {
     if (!navigator.geolocation) {
-        searchStatus.textContent = "Tu dispositivo no permite geolocalización.";
+        setStatus("Tu dispositivo no permite geolocalización.");
         return;
     }
 
-    searchStatus.textContent = "Buscando tu ubicación actual...";
+    setStatus("Buscando tu ubicación actual...");
 
     navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -262,10 +315,10 @@ function goToUserLocation() {
 
             userMarker.bindPopup("Tu ubicación actual").openPopup();
 
-            searchStatus.textContent = "Ubicación actual encontrada. Ahora marcá los puntos en el mapa.";
+            setStatus("Ubicación actual encontrada. Ahora marcá los puntos en el mapa.");
         },
         () => {
-            searchStatus.textContent = "No se pudo obtener tu ubicación. Podés buscar el campo manualmente.";
+            setStatus("No se pudo obtener tu ubicación. Podés buscar el campo manualmente.");
         },
         {
             enableHighAccuracy: true,
@@ -275,45 +328,93 @@ function goToUserLocation() {
     );
 }
 
-// función global para el botón del popup
+// ===== ACCIÓN GLOBAL PARA POPUP =====
 window.removePoint = function (index) {
     points.splice(index, 1);
     renderPoints();
 };
 
-// ===== EVENTOS =====
+// ===== EVENTOS MAPA =====
 map.on("click", function (e) {
     addPoint(e.latlng);
 });
 
-searchBtn.addEventListener("click", () => {
-    searchLocation(searchInput.value);
-});
+// ===== EVENTOS BÚSQUEDA =====
+if (searchBtn) {
+    searchBtn.addEventListener("click", () => {
+        searchLocation(searchInput.value);
+    });
+}
 
-searchBtnMobile.addEventListener("click", () => {
-    searchLocation(searchInputMobile.value);
-});
+if (searchBtnMobile) {
+    searchBtnMobile.addEventListener("click", () => {
+        searchLocation(searchInputMobile.value);
+    });
+}
 
-searchInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") searchLocation(searchInput.value);
-});
+if (searchInput) {
+    searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") searchLocation(searchInput.value);
+    });
+}
 
-searchInputMobile.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") searchLocation(searchInputMobile.value);
-});
+if (searchInputMobile) {
+    searchInputMobile.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") searchLocation(searchInputMobile.value);
+    });
+}
 
-gpsBtn.addEventListener("click", goToUserLocation);
-gpsBtnMobile.addEventListener("click", goToUserLocation);
+// ===== EVENTOS GPS =====
+if (gpsBtn) gpsBtn.addEventListener("click", goToUserLocation);
+if (gpsBtnMobile) gpsBtnMobile.addEventListener("click", goToUserLocation);
 
-[nameInput, phoneInput, fieldNameInput].forEach((input) => {
-    input.addEventListener("input", updateWhatsAppLinks);
-});
+// ===== EVENTOS BORRAR TODO =====
+if (clearBtn) clearBtn.addEventListener("click", clearAllPoints);
+if (clearBtnMobile) clearBtnMobile.addEventListener("click", clearAllPoints);
 
-clearBtn.addEventListener("click", clearAllPoints);
+// ===== SINCRONIZACIÓN DE INPUTS =====
+if (nameInput && nameInputMobile) {
+    nameInput.addEventListener("input", () => {
+        syncInputs(nameInput, nameInputMobile);
+        updateWhatsAppLinks();
+    });
 
-// intentar ubicar automáticamente al abrir
+    nameInputMobile.addEventListener("input", () => {
+        syncInputs(nameInputMobile, nameInput);
+        updateWhatsAppLinks();
+    });
+}
+
+if (phoneInput && phoneInputMobile) {
+    phoneInput.addEventListener("input", () => {
+        syncInputs(phoneInput, phoneInputMobile);
+        updateWhatsAppLinks();
+    });
+
+    phoneInputMobile.addEventListener("input", () => {
+        syncInputs(phoneInputMobile, phoneInput);
+        updateWhatsAppLinks();
+    });
+}
+
+if (fieldNameInput && fieldNameInputMobile) {
+    fieldNameInput.addEventListener("input", () => {
+        syncInputs(fieldNameInput, fieldNameInputMobile);
+        updateWhatsAppLinks();
+    });
+
+    fieldNameInputMobile.addEventListener("input", () => {
+        syncInputs(fieldNameInputMobile, fieldNameInput);
+        updateWhatsAppLinks();
+    });
+}
+
+// ===== CARGA INICIAL =====
 window.addEventListener("load", () => {
     setTimeout(() => {
         goToUserLocation();
     }, 800);
+
+    updatePointsPanel();
+    updateWhatsAppLinks();
 });

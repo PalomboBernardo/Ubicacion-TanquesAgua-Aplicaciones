@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mapa de Tanques de Agua</title>
+    <title>Ubicación de tanques de agua</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -14,8 +14,9 @@
 
 <body>
     <div class="app">
+        <!-- PANEL IZQUIERDO PC -->
         <aside class="sidebar">
-            <h1>Ubicacion de Taques</h1>
+            <h1>Mapa de Tanques</h1>
             <p class="intro-text">
                 Esta herramienta permite ubicar uno o varios tanques de agua dentro del campo y enviar todos los puntos
                 juntos por WhatsApp para organizar una visita, relevamiento o servicio.
@@ -67,7 +68,7 @@
 
                 <a id="waBtn1" class="btn success" href="#" target="_blank" rel="noopener noreferrer"
                     style="pointer-events: none; opacity: .5;">
-                    Enviar puntos a Palombo Bernardo
+                    Enviar puntos a Palombo Bernard
                 </a>
 
                 <a id="waBtn2" class="btn success alt" href="#" target="_blank" rel="noopener noreferrer"
@@ -78,8 +79,7 @@
                 <button id="clearBtn" class="secondary">Borrar todos los puntos</button>
 
                 <div class="hint">
-                    Cada toque o clic en el mapa agrega un nuevo punto. Cuando terminás, enviás todos juntos por
-                    WhatsApp.
+                    Tocá cada punto para abrirlo. Si te equivocaste, podés borrar solo ese punto.
                 </div>
             </div>
 
@@ -97,6 +97,7 @@
             </div>
         </aside>
 
+        <!-- MAPA -->
         <main class="map-wrap">
             <div class="map-header">
                 <h2>Ubicación de tanques de agua</h2>
@@ -110,23 +111,61 @@
                     <ol>
                         <li>Completá tu nombre, teléfono y nombre del campo.</li>
                         <li>Permití la ubicación o buscá el campo manualmente.</li>
-                        <li>Hacé clic o tocá el mapa para marcar cada tanque.</li>
+                        <li>Tocá el mapa para marcar cada tanque.</li>
+                        <li>Si te equivocás, tocá el punto y borrá solo ese.</li>
                         <li>Cuando termines, enviá todos los puntos por WhatsApp.</li>
                     </ol>
                 </div>
             </div>
 
+            <!-- PANEL MOBILE COMPLETO -->
             <div class="topbar">
                 <div class="mobile-box">
-                    <div class="row mobile-row">
-                        <input id="searchInputMobile" type="text" placeholder="Buscar campo o ubicación" />
-                        <button class="primary" id="searchBtnMobile">Buscar</button>
-                    </div>
+                    <div class="mobile-scroll">
+                        <h3 class="mobile-title">Cargar datos y marcar puntos</h3>
 
-                    <button class="gps-btn" id="gpsBtnMobile">Usar mi ubicación</button>
+                        <div class="field">
+                            <label for="nameMobile">Nombre</label>
+                            <input id="nameMobile" type="text" placeholder="Ej: Juan Pérez" />
+                        </div>
 
-                    <div class="small-text">
-                        Tocá el mapa para agregar uno o varios puntos.
+                        <div class="field">
+                            <label for="phoneMobile">Teléfono</label>
+                            <input id="phoneMobile" type="tel" placeholder="Ej: 3472..." />
+                        </div>
+
+                        <div class="field">
+                            <label for="fieldNameMobile">Nombre del campo</label>
+                            <input id="fieldNameMobile" type="text" placeholder="Ej: Campo La Esperanza" />
+                        </div>
+
+                        <div class="row mobile-row">
+                            <input id="searchInputMobile" type="text" placeholder="Buscar campo o ubicación" />
+                            <button class="primary" id="searchBtnMobile">Buscar</button>
+                        </div>
+
+                        <button class="gps-btn" id="gpsBtnMobile">Usar mi ubicación</button>
+
+                        <div class="small-text">
+                            Completá tus datos, buscá el lugar o usá tu ubicación y después tocá el mapa para agregar
+                            uno o varios puntos.
+                        </div>
+
+                        <div class="mobile-status" id="searchStatusMobile"></div>
+
+                        <div class="mobile-actions">
+                            <a id="waBtn1Mobile" class="btn success" href="#" target="_blank" rel="noopener noreferrer"
+                                style="pointer-events: none; opacity: .5;">
+                                Enviar a Bernardo
+                            </a>
+
+                            <a id="waBtn2Mobile" class="btn success alt" href="#" target="_blank"
+                                rel="noopener noreferrer" style="pointer-events: none; opacity: .5;">
+                                Enviar al segundo número
+                            </a>
+
+                            <button id="clearBtnMobile" class="secondary">Borrar todos los puntos</button>
+                        </div>
                     </div>
                 </div>
             </div>
